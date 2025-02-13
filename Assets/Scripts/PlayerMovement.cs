@@ -15,11 +15,16 @@ public class PlayerMovement : NetworkBehaviour
     public LayerMask groundLayer;
 
     private PlayerInput input;
+    private PlayerNetworkSync networkSync;
+
+    public event System.Action<float> OnSpeedChanged;
+    public event System.Action<bool> OnJumpStateChanged;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         input = GetComponent<PlayerInput>();
+        networkSync = GetComponent<PlayerNetworkSync>();
         currentSpeed = walkSpeed;
     }
 
@@ -58,17 +63,12 @@ public class PlayerMovement : NetworkBehaviour
         // Jump
         if (input.JumpBuffered && isGrounded)
         {
-            Debug.Log("🚀 Jumping!");
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             input.JumpBuffered = false;
         }
-        // Sync movement across the network
-        UpdateMovementServerRpc(transform.position);
-    }
 
-    [ServerRpc]
-    private void UpdateMovementServerRpc(Vector3 newPosition)
-    {
-        transform.position = newPosition;
+        // Notify PlayerNetworkSync
+        OnSpeedChanged?.Invoke(currentSpeed);
+        OnJumpStateChanged?.Invoke(!isGrounded);
     }
 }

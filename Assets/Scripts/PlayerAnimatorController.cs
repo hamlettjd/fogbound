@@ -1,23 +1,34 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerAnimatorController : MonoBehaviour
+public class PlayerAnimatorController : NetworkBehaviour
 {
     public Animator animator;
 
     private PlayerMovement movement;
     private PlayerInput input;
-    private Rigidbody rb; // Reference to Rigidbody for velocity calculations
+    private PlayerNetworkSync networkSync;
+    private Rigidbody rb;
 
     void Start()
     {
         movement = GetComponent<PlayerMovement>();
         input = GetComponent<PlayerInput>();
-        rb = GetComponent<Rigidbody>(); // Get Rigidbody from Player GameObject
+        networkSync = GetComponent<PlayerNetworkSync>();
+        rb = GetComponent<Rigidbody>();
+
         if (animator == null)
         {
             Debug.LogWarning("Animator is not assigned.");
+        }
+
+        if (networkSync != null)
+        {
+            // 🔹 Subscribe to animation sync events
+            networkSync.OnSpeedChanged += UpdateSpeed;
+            networkSync.OnJumpStateChanged += UpdateJumpState;
         }
     }
 
@@ -26,19 +37,27 @@ public class PlayerAnimatorController : MonoBehaviour
         if (animator == null)
             return;
 
-        // Ensure speed transitions smoothly but properly goes to zero when not moving
-        if (input.MovementInput.magnitude > 0)
+        if (IsOwner)
         {
-            animator.SetFloat("Speed", movement.currentSpeed / movement.maxRunSpeed);
-        }
-        else
-        {
-            animator.SetFloat("Speed", 0); // Force idle animation when not moving
-        }
-        // **Trigger Jump when the player leaves the ground**
-        if (!movement.isGrounded && !animator.GetBool("IsJumping"))
-        {
-            TriggerJump(); // Call the function to start jump animation
+            // **✅ Local Player: Instantly update animations**
+            if (input.MovementInput.magnitude > 0)
+            {
+                animator.SetFloat("Speed", movement.currentSpeed / movement.maxRunSpeed);
+            }
+            else
+            {
+                animator.SetFloat("Speed", 0); // Force idle animation when not moving
+            }
+
+            // **Trigger Jump when the player leaves the ground**
+            if (!movement.isGrounded && !animator.GetBool("IsJumping"))
+            {
+                TriggerJump();
+            }
+
+            // **Sync animations over the network**
+            networkSync.SetSpeedServerRpc(animator.GetFloat("Speed"));
+            networkSync.SetJumpStateServerRpc(animator.GetBool("IsJumping"));
         }
     }
 
@@ -47,19 +66,37 @@ public class PlayerAnimatorController : MonoBehaviour
         if (animator == null)
             return;
 
-        // Grounded state should be updated in FixedUpdate since it's physics-dependent
         animator.SetBool("IsGrounded", movement.isGrounded);
 
-        // Update FallSpeed dynamically based on vertical velocity
         if (!movement.isGrounded)
         {
             float fallSpeed = 1 + Mathf.Abs(rb.linearVelocity.y);
             animator.SetFloat("FallSpeed", fallSpeed);
         }
-        else if (animator.GetBool("IsJumping")) // If grounded and was jumping, reset the jump layer
+        else if (animator.GetBool("IsJumping"))
         {
-            Debug.Log("starting resetJumpLayer");
             StartCoroutine(ResetJumpLayer());
+        }
+    }
+
+    // 🔹 **Called when speed updates over the network (for remote players)**
+    public void UpdateSpeed(float speed)
+    {
+        if (!IsOwner) // 🔹 Only remote players get updates
+        {
+            animator.SetFloat("Speed", speed);
+        }
+    }
+
+    // 🔹 **Called when jump state updates over the network (for remote players)**
+    public void UpdateJumpState(bool isJumping)
+    {
+        if (!IsOwner)
+        {
+            if (isJumping)
+                TriggerJump();
+            else
+                StartCoroutine(ResetJumpLayer());
         }
     }
 
