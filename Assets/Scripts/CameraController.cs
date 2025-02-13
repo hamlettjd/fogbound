@@ -21,10 +21,16 @@ public class CameraController : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         currentXRotation = angles.y;
         currentYRotation = angles.x;
+        if (player == null)
+        {
+            Debug.LogWarning("🚨 CameraController: No player assigned. Waiting for assignment...");
+        }
     }
 
     void LateUpdate()
     {
+        if (player == null)
+            return; // 🛑 Don't run if no player is assigned
         // Rotate camera when right mouse button is held
         if (Input.GetMouseButton(1)) // Right mouse button
         {
@@ -70,6 +76,12 @@ public class CameraController : MonoBehaviour
 
         // Look at the player
         transform.LookAt(player.position);
+    }
+
+    public void AssignPlayer(Transform newPlayer)
+    {
+        Debug.Log($"📷 CameraController: Player assigned -> {newPlayer.name}");
+        player = newPlayer;
     }
 
     private Vector3 AdjustForCollisions(Vector3 targetPosition, Vector3 desiredPosition)

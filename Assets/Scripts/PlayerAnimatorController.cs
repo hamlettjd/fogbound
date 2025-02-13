@@ -7,12 +7,14 @@ public class PlayerAnimatorController : MonoBehaviour
     public Animator animator;
 
     private PlayerMovement movement;
-
-    public float previousSpeed = 0;
+    private PlayerInput input;
+    private Rigidbody rb; // Reference to Rigidbody for velocity calculations
 
     void Start()
     {
         movement = GetComponent<PlayerMovement>();
+        input = GetComponent<PlayerInput>();
+        rb = GetComponent<Rigidbody>(); // Get Rigidbody from Player GameObject
         if (animator == null)
         {
             Debug.LogWarning("Animator is not assigned.");
@@ -24,16 +26,41 @@ public class PlayerAnimatorController : MonoBehaviour
         if (animator == null)
             return;
 
-        // Update speed
-        if (previousSpeed != movement.currentSpeed)
+        // Ensure speed transitions smoothly but properly goes to zero when not moving
+        if (input.MovementInput.magnitude > 0)
         {
-            Debug.Log($"speed has changed to: {movement.currentSpeed}");
+            animator.SetFloat("Speed", movement.currentSpeed / movement.maxRunSpeed);
         }
-        animator.SetFloat("Speed", movement.currentSpeed / movement.maxRunSpeed);
+        else
+        {
+            animator.SetFloat("Speed", 0); // Force idle animation when not moving
+        }
+        // **Trigger Jump when the player leaves the ground**
+        if (!movement.isGrounded && !animator.GetBool("IsJumping"))
+        {
+            TriggerJump(); // Call the function to start jump animation
+        }
+    }
 
-        // Update grounded and jumping states
+    void FixedUpdate()
+    {
+        if (animator == null)
+            return;
+
+        // Grounded state should be updated in FixedUpdate since it's physics-dependent
         animator.SetBool("IsGrounded", movement.isGrounded);
-        previousSpeed = movement.currentSpeed;
+
+        // Update FallSpeed dynamically based on vertical velocity
+        if (!movement.isGrounded)
+        {
+            float fallSpeed = 1 + Mathf.Abs(rb.linearVelocity.y);
+            animator.SetFloat("FallSpeed", fallSpeed);
+        }
+        else if (animator.GetBool("IsJumping")) // If grounded and was jumping, reset the jump layer
+        {
+            Debug.Log("starting resetJumpLayer");
+            StartCoroutine(ResetJumpLayer());
+        }
     }
 
     public void TriggerJump()
