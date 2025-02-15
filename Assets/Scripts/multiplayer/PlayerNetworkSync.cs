@@ -58,12 +58,24 @@ public class PlayerNetworkSync : NetworkBehaviour
     {
         netSpeed.OnValueChanged += (oldValue, newValue) =>
         {
+            if (animatorController == null)
+            {
+                Debug.LogError(
+                    "❌ PlayerNetworkSync: AnimatorController is missing on this GameObject!"
+                );
+            }
             OnSpeedChanged?.Invoke(newValue); // Trigger event
             animatorController.UpdateSpeed(newValue);
         };
 
         netIsJumping.OnValueChanged += (oldValue, newValue) =>
         {
+            if (animatorController == null)
+            {
+                Debug.LogError(
+                    "❌ PlayerNetworkSync: AnimatorController is missing on this GameObject!"
+                );
+            }
             OnJumpStateChanged?.Invoke(newValue); // Trigger event
             animatorController.UpdateJumpState(newValue);
         };
