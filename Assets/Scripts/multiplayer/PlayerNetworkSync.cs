@@ -88,12 +88,24 @@ public class PlayerNetworkSync : NetworkBehaviour
     [ServerRpc]
     public void SetSpeedServerRpc(float speed)
     {
-        netSpeed.Value = speed;
+        if (!IsOwner)
+            return; // ⛔ Ensure only the actual owner can update their speed
+
+        if (Mathf.Abs(netSpeed.Value - speed) > 0.01f)
+        {
+            netSpeed.Value = speed;
+        }
     }
 
     [ServerRpc]
     public void SetJumpStateServerRpc(bool isJumping)
     {
-        netIsJumping.Value = isJumping;
+        if (!IsOwner)
+            return; // ⛔ Ensure only the actual owner can update their jump state
+
+        if (netIsJumping.Value != isJumping)
+        {
+            netIsJumping.Value = isJumping;
+        }
     }
 }
