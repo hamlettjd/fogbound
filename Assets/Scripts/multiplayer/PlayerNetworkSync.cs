@@ -30,6 +30,12 @@ public class PlayerNetworkSync : NetworkBehaviour
     {
         movement = GetComponent<PlayerMovement>();
         animatorController = GetComponent<PlayerAnimatorController>();
+        if (animatorController == null)
+        {
+            Debug.LogError(
+                "❌ PlayerNetworkSync: AnimatorController is STILL missing on this GameObject!"
+            );
+        }
 
         if (!IsOwner)
             return;
