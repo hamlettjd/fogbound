@@ -1,39 +1,40 @@
+using Unity.Netcode;
 using UnityEngine;
-using System.Collections;
 
-public class PlayerMovementOld : MonoBehaviour
+[RequireComponent(typeof(PlayerInput))]
+public class PlayerMovement : NetworkBehaviour
 {
-    public float walkSpeed = 4f; // Default walking speed
-    public float maxRunSpeed = 10f; // Maximum running speed
-    public float acceleration = 10f; // Acceleration when sprinting
-    public float jumpForce = 5f; // Jump force
-    public float currentSpeed; // Current movement speed
+    public float walkSpeed = 4f;
+    public float maxRunSpeed = 10f;
+    public float acceleration = 10f;
+    public float jumpForce = 5f;
+
+    public float currentSpeed;
     private Rigidbody rb;
-    private bool isGrounded;
+    public bool isGrounded;
     public LayerMask groundLayer;
-    public Animator animator; // Reference to the Animator component
+
+    private PlayerInput input;
+    private PlayerNetworkSync networkSync;
+
+    public event System.Action<float> OnSpeedChanged;
+    public event System.Action<bool> OnJumpStateChanged;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        currentSpeed = walkSpeed; // Initialize current speed to walking speed
-        if (animator == null)
-        {
-            Debug.LogWarning("Animator is not assigned. Assign the Animator in the Inspector.");
-        }
+        input = GetComponent<PlayerInput>();
+        networkSync = GetComponent<PlayerNetworkSync>();
+        currentSpeed = walkSpeed;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        Debug.Log($"Current State: {animator.GetCurrentAnimatorStateInfo(1).fullPathHash}");
-        Debug.Log($"Layer Weight: {animator.GetLayerWeight(1)}");
-        // Movement input
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical).normalized;
-
-        // Adjust speed for running or walking
-        if (Input.GetKey(KeyCode.LeftShift) && movement.magnitude > 0) // Sprinting
+        // ✅ Ensure only the local player can move their character
+        if (!IsOwner)
+            return;
+        // Adjust speed
+        if (input.SprintInput && input.MovementInput.magnitude > 0)
         {
             currentSpeed = Mathf.MoveTowards(
                 currentSpeed,
@@ -41,7 +42,7 @@ public class PlayerMovementOld : MonoBehaviour
                 acceleration * Time.deltaTime
             );
         }
-        else // Walking
+        else
         {
             currentSpeed = Mathf.MoveTowards(
                 currentSpeed,
@@ -51,62 +52,23 @@ public class PlayerMovementOld : MonoBehaviour
         }
 
         // Apply movement
-        transform.Translate(movement * currentSpeed * Time.deltaTime, Space.Self);
+        Vector3 movement = input.MovementInput.normalized * currentSpeed * Time.fixedDeltaTime;
+        transform.Translate(movement, Space.Self);
 
-        // Update Animator with movement speed
-        if (animator != null)
-        {
-            animator.SetFloat("Speed", movement.magnitude * (currentSpeed / maxRunSpeed));
-        }
+        // Ground Check with debug logs
+        RaycastHit hit;
+        bool wasGrounded = isGrounded; // Store previous state for debugging
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f, groundLayer);
 
-        // Ground Check
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
-
-        // Update Animator parameters
-        if (animator != null)
-        {
-            animator.SetBool("IsGrounded", isGrounded);
-
-            // Adjust animation speed for Jump Mid based on fall speed
-            if (!isGrounded)
-            {
-                float fallSpeed = Mathf.Abs(rb.linearVelocity.y);
-                animator.SetFloat("FallSpeed", fallSpeed);
-            }
-        }
-
-        // Jumping
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !animator.GetBool("IsJumping"))
+        // Jump
+        if (input.JumpBuffered && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-            if (animator != null)
-            {
-                animator.SetLayerWeight(1, 1f); // Activate Jump Layer
-                animator.SetBool("IsJumping", true);
-
-                // Force the Jump Start state
-                if (!animator.GetCurrentAnimatorStateInfo(1).IsName("Jump Start"))
-                {
-                    animator.Play("Jump Start", 1); // Jump Layer, Jump Start state
-                }
-            }
-        }
-    }
-
-    private IEnumerator ResetJumpLayerAfterAnimation()
-    {
-        // Wait for Jump Land animation to finish
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1); // Jump Layer
-        while (!stateInfo.IsName("Jump Land") || stateInfo.normalizedTime < 1f)
-        {
-            stateInfo = animator.GetCurrentAnimatorStateInfo(1);
-            yield return null;
-            Debug.Log($"stateInfo.normalizedTime : {stateInfo.normalizedTime}");
+            input.JumpBuffered = false;
         }
 
-        // Reset Jump Layer and parameters
-        animator.SetLayerWeight(1, 0f);
-        animator.SetBool("IsJumping", false);
+        // Notify PlayerNetworkSync
+        OnSpeedChanged?.Invoke(currentSpeed);
+        OnJumpStateChanged?.Invoke(!isGrounded);
     }
 }

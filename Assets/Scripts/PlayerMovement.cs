@@ -15,24 +15,29 @@ public class PlayerMovement : NetworkBehaviour
     public LayerMask groundLayer;
 
     private PlayerInput input;
-    private PlayerNetworkSync networkSync;
 
-    public event System.Action<float> OnSpeedChanged;
-    public event System.Action<bool> OnJumpStateChanged;
+    private NetworkVariable<Vector3> networkedPosition = new NetworkVariable<Vector3>(
+        Vector3.zero,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner
+    );
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         input = GetComponent<PlayerInput>();
-        networkSync = GetComponent<PlayerNetworkSync>();
         currentSpeed = walkSpeed;
     }
 
     void FixedUpdate()
     {
-        // ✅ Ensure only the local player can move their character
         if (!IsOwner)
+        {
+            // 🛑 Non-owners should only read position updates, NOT move the object
+            transform.position = networkedPosition.Value;
             return;
+        }
+
         // Adjust speed
         if (input.SprintInput && input.MovementInput.magnitude > 0)
         {
@@ -55,9 +60,9 @@ public class PlayerMovement : NetworkBehaviour
         Vector3 movement = input.MovementInput.normalized * currentSpeed * Time.fixedDeltaTime;
         transform.Translate(movement, Space.Self);
 
-        // Ground Check with debug logs
+        // Ground Check
         RaycastHit hit;
-        bool wasGrounded = isGrounded; // Store previous state for debugging
+        bool wasGrounded = isGrounded;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f, groundLayer);
 
         // Jump
@@ -67,8 +72,7 @@ public class PlayerMovement : NetworkBehaviour
             input.JumpBuffered = false;
         }
 
-        // Notify PlayerNetworkSync
-        OnSpeedChanged?.Invoke(currentSpeed);
-        OnJumpStateChanged?.Invoke(!isGrounded);
+        // 🛰️ Update the position over the network
+        networkedPosition.Value = transform.position;
     }
 }
