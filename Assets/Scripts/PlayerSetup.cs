@@ -7,6 +7,7 @@ public class PlayerSetup : NetworkBehaviour
 
     void Start()
     {
+        InitializePlayer();
         if (!IsOwner)
             return; // 🛑 Only initialize for the local player
 
@@ -37,5 +38,17 @@ public class PlayerSetup : NetworkBehaviour
         }
 
         // Additional future setup (name, skins, UI, etc.)
+    }
+
+    void InitializePlayer()
+    {
+        Debug.Log($"🎭 Initializing player: {gameObject.name}");
+
+        PlayerAnimatorController animatorController = GetComponent<PlayerAnimatorController>();
+        if (animatorController == null)
+        {
+            Debug.LogError("❌ PlayerAnimatorController is MISSING! Adding it manually.");
+            animatorController = gameObject.AddComponent<PlayerAnimatorController>();
+        }
     }
 }
