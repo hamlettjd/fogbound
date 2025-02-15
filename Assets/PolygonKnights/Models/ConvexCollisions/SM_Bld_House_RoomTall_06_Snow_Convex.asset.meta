@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d6a386ccfd47b714695d4d76c96aa31b
+timeCreated: 1580700561
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Bld_House_RoomTall_06_Snow_Convex.asset
+  uploadId: 712846

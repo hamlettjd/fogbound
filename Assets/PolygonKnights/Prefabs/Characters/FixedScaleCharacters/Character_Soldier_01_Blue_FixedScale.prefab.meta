@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 457b3ccefeecdef4a95ba381a0bcedeb
+timeCreated: 1545086290
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Prefabs/Characters/FixedScaleCharacters/Character_Soldier_01_Blue_FixedScale.prefab
+  uploadId: 712846

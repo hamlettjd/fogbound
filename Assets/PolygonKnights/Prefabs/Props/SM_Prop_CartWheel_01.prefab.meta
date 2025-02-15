@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a46d562cc4980004b95e73322fc948be
+timeCreated: 1487205333
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Prefabs/Props/SM_Prop_CartWheel_01.prefab
+  uploadId: 712846

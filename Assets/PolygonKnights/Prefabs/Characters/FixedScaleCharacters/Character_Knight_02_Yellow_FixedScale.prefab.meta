@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 04da108a79352fd408b092086312e147
+timeCreated: 1545086292
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Prefabs/Characters/FixedScaleCharacters/Character_Knight_02_Yellow_FixedScale.prefab
+  uploadId: 712846

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 360c73b9bf9a34d4c84bc0581d0499eb
+timeCreated: 1487632474
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Prefabs/Characters/Character_Knight_01_Orange.prefab
+  uploadId: 712846

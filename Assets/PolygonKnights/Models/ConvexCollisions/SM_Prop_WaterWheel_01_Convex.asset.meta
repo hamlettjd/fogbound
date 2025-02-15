@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2d1a060266a10f747ba52679bdad1f41
+timeCreated: 1580700177
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Prop_WaterWheel_01_Convex.asset
+  uploadId: 712846

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f2bacf2f6de57234d8590e8cf628e4cf
+timeCreated: 1580700484
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Bld_House_Window_05_Convex.asset
+  uploadId: 712846

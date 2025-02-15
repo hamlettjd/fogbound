@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ccae2dc6cf6f0c4479b782fedd0c8172
+timeCreated: 1487631079
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Materials/PolyKnights_Character_Mat_Black.mat
+  uploadId: 712846

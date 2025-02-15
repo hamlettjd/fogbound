@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5c34bfea69dddcc489690981f45fd5ef
+timeCreated: 1580700128
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Wep_Halberd_01_Convex.asset
+  uploadId: 712846

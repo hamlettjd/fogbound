@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 0428867337540fa40976a90581d3bbfd
+timeCreated: 1580700796
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Bld_Rockwall_StairArchway_01_Convex
+    3.asset
+  uploadId: 712846

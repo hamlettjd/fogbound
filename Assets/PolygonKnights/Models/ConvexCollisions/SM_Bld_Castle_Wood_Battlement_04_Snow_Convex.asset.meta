@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cf41f8533f34690429f076e319d3997c
+timeCreated: 1580700541
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Bld_Castle_Wood_Battlement_04_Snow_Convex.asset
+  uploadId: 712846

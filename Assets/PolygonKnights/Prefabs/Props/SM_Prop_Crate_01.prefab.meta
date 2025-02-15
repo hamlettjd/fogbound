@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f028244a47462e3449e09903dedd7955
+timeCreated: 1487205341
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Prefabs/Props/SM_Prop_Crate_01.prefab
+  uploadId: 712846

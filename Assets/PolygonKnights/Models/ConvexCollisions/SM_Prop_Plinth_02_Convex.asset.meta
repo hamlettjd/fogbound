@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 345af615ad3cabf4287bf6f7663ce09b
+timeCreated: 1580700181
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Prop_Plinth_02_Convex.asset
+  uploadId: 712846

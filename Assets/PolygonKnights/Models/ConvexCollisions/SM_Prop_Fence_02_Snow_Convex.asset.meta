@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cb4e0433d38d8554fbe225005f8765ee
+timeCreated: 1580700301
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 83694
+  packageName: POLYGON Knights - Low Poly 3D Art by Synty
+  packageVersion: 1.5.1
+  assetPath: Assets/PolygonKnights/Models/ConvexCollisions/SM_Prop_Fence_02_Snow_Convex.asset
+  uploadId: 712846
