@@ -38,7 +38,13 @@ public class PlayerNetworkSync : NetworkBehaviour
         }
 
         if (!IsOwner)
+        // Disable Rigidbody physics for non-owner players
+        {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.isKinematic = true;
             return;
+        }
 
         movement.OnSpeedChanged += SyncSpeed;
         movement.OnJumpStateChanged += SyncJump;
