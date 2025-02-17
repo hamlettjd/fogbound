@@ -9,61 +9,44 @@ public class PlayerAnimatorController : NetworkBehaviour
 
     private PlayerMovement movement;
     private PlayerInput input;
-    private PlayerNetworkSync networkSync;
     private Rigidbody rb;
 
     void Start()
     {
         movement = GetComponent<PlayerMovement>();
         input = GetComponent<PlayerInput>();
-        networkSync = GetComponent<PlayerNetworkSync>();
         rb = GetComponent<Rigidbody>();
 
         if (animator == null)
         {
             Debug.LogWarning("Animator is not assigned.");
         }
-
-        if (networkSync != null)
-        {
-            // 🔹 Subscribe to animation sync events
-            networkSync.OnSpeedChanged += UpdateSpeed;
-            networkSync.OnJumpStateChanged += UpdateJumpState;
-        }
     }
 
     void Update()
     {
-        if (animator == null)
+        if (animator == null || !IsOwner)
             return;
-
-        if (IsOwner)
+        // **✅ Local Player: Instantly update animations**
+        if (input.MovementInput.magnitude > 0)
         {
-            // **✅ Local Player: Instantly update animations**
-            if (input.MovementInput.magnitude > 0)
-            {
-                animator.SetFloat("Speed", movement.currentSpeed / movement.maxRunSpeed);
-            }
-            else
-            {
-                animator.SetFloat("Speed", 0); // Force idle animation when not moving
-            }
+            animator.SetFloat("Speed", movement.currentSpeed / movement.maxRunSpeed);
+        }
+        else
+        {
+            animator.SetFloat("Speed", 0); // Force idle animation when not moving
+        }
 
-            // **Trigger Jump when the player leaves the ground**
-            if (!movement.isGrounded && !animator.GetBool("IsJumping"))
-            {
-                TriggerJump();
-            }
-
-            // **Sync animations over the network**
-            networkSync.SetSpeedServerRpc(animator.GetFloat("Speed"));
-            networkSync.SetJumpStateServerRpc(animator.GetBool("IsJumping"));
+        // **Trigger Jump when the player leaves the ground**
+        if (!movement.isGrounded && !animator.GetBool("IsJumping"))
+        {
+            TriggerJump();
         }
     }
 
     void FixedUpdate()
     {
-        if (animator == null)
+        if (animator == null || !IsOwner)
             return;
 
         animator.SetBool("IsGrounded", movement.isGrounded);

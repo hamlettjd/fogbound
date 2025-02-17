@@ -16,15 +16,10 @@ public class PlayerMovement : NetworkBehaviour
 
     private PlayerInput input;
 
-    private NetworkVariable<Vector3> networkedPosition = new NetworkVariable<Vector3>(
-        Vector3.zero,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Owner
-    );
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
         input = GetComponent<PlayerInput>();
         currentSpeed = walkSpeed;
     }
@@ -32,12 +27,7 @@ public class PlayerMovement : NetworkBehaviour
     void FixedUpdate()
     {
         if (!IsOwner)
-        {
-            // 🛑 Non-owners should only read position updates, NOT move the object
-            transform.position = networkedPosition.Value;
             return;
-        }
-
         // Adjust speed
         if (input.SprintInput && input.MovementInput.magnitude > 0)
         {
@@ -56,14 +46,20 @@ public class PlayerMovement : NetworkBehaviour
             );
         }
 
-        // Apply movement
-        Vector3 movement = input.MovementInput.normalized * currentSpeed * Time.fixedDeltaTime;
-        transform.Translate(movement, Space.Self);
+        // 🏃‍♂️ Movement relative to the player's facing direction
+        Vector3 moveDirection =
+            (transform.forward * input.MovementInput.z) + (transform.right * input.MovementInput.x);
+        moveDirection.Normalize(); // Prevents diagonal speed boost
+
+        // Ensure movement isn't zero before applying speed
+        if (moveDirection.magnitude > 0)
+        {
+            Vector3 newPosition = rb.position + moveDirection * currentSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(newPosition);
+        }
 
         // Ground Check
-        RaycastHit hit;
-        bool wasGrounded = isGrounded;
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, 1.1f, groundLayer);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
 
         // Jump
         if (input.JumpBuffered && isGrounded)
@@ -71,8 +67,5 @@ public class PlayerMovement : NetworkBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             input.JumpBuffered = false;
         }
-
-        // 🛰️ Update the position over the network
-        networkedPosition.Value = transform.position;
     }
 }

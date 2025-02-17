@@ -17,7 +17,6 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             JumpBuffered = true;
-            Debug.Log("🆙 Jump key detected in PlayerInput!");
         }
 
         SprintInput = Input.GetKey(KeyCode.LeftShift);

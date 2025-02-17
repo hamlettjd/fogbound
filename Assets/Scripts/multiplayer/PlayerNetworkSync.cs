@@ -46,8 +46,8 @@ public class PlayerNetworkSync : NetworkBehaviour
             return;
         }
 
-        movement.OnSpeedChanged += SyncSpeed;
-        movement.OnJumpStateChanged += SyncJump;
+        // movement.OnSpeedChanged += SyncSpeed;
+        // movement.OnJumpStateChanged += SyncJump;
     }
 
     private void SyncSpeed(float speed)
