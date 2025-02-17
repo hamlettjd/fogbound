@@ -25,7 +25,7 @@ public class PlayerAnimatorController : NetworkBehaviour
 
     void Update()
     {
-        if (animator == null)
+        if (animator == null || !IsOwner)
             Debug.LogWarning("⚠️ Animator is not assigned!");
         return;
         // **✅ Local Player: Instantly update animations**
@@ -52,7 +52,7 @@ public class PlayerAnimatorController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (animator == null)
+        if (animator == null || !IsOwner)
             return;
 
         animator.SetBool("IsGrounded", movement.isGrounded);
