@@ -25,11 +25,13 @@ public class PlayerAnimatorController : NetworkBehaviour
 
     void Update()
     {
-        if (animator == null || !IsOwner)
+        if (animator == null)
         {
             Debug.LogWarning("⚠️ Animator is not assigned!");
             return;
         }
+        if (!IsOwner)
+            return;
         // **✅ Local Player: Instantly update animations**
 
         // 🎭 Log animation values to check if they update correctly
