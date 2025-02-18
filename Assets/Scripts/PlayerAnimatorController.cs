@@ -34,10 +34,6 @@ public class PlayerAnimatorController : NetworkBehaviour
             return;
         // **✅ Local Player: Instantly update animations**
 
-        // 🎭 Log animation values to check if they update correctly
-        Debug.Log(
-            $"🎭 [Local Player Anim Debug] Speed: {animator.GetFloat("Speed")}, IsJumping: {animator.GetBool("IsJumping")}, IsGrounded: {animator.GetBool("IsGrounded")}"
-        );
         if (input.MovementInput.magnitude > 0)
         {
             animator.SetFloat("Speed", movement.currentSpeed / movement.maxRunSpeed);
