@@ -1788,7 +1788,7 @@ GameObject:
   - component: {fileID: -1753486569414316364}
   - component: {fileID: 1994493171017546501}
   - component: {fileID: -27174242471833369}
-  - component: {fileID: 3522249747472840736}
+  - component: {fileID: 3238978430945360118}
   m_Layer: 0
   m_Name: Hello_Knight
   m_TagString: Untagged
@@ -2028,7 +2028,7 @@ MonoBehaviour:
   UseRigidBodyForMotion: 1
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
---- !u!114 &3522249747472840736
+--- !u!114 &3238978430945360118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2037,12 +2037,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5212998863462659123}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Script: {fileID: 11500000, guid: c28e0aea31dbec444a17f3536dba5034, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 297376962608731934}
 --- !u!1 &5300266846169792732
 GameObject:
   m_ObjectHideFlags: 0
