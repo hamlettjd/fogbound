@@ -15395,8 +15395,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -27590,7 +27590,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter Host IP to join...
+  m_text: Enter Host Code to join...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -27617,8 +27617,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -56321,7 +56321,7 @@ GameObject:
   - component: {fileID: 1826096011}
   - component: {fileID: 1826096012}
   m_Layer: 5
-  m_Name: HostIPText
+  m_Name: JoinCodeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56374,7 +56374,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Host IP: ...'
+  m_text: Start Host or Join a game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -57004,7 +57004,7 @@ GameObject:
   - component: {fileID: 1855378477}
   - component: {fileID: 1855378476}
   m_Layer: 5
-  m_Name: IPInputField
+  m_Name: JoinCodeInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65373,9 +65373,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 263dbd2ff728d8944b55ce3359157729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ipAddressInput: {fileID: 1855378476}
-  hostIpText: {fileID: 1826096012}
-  statusText: {fileID: 411005137}
+  JoinCodeText: {fileID: 1826096012}
+  joinCodeInput: {fileID: 1855378476}
 --- !u!4 &2110854087
 Transform:
   m_ObjectHideFlags: 0

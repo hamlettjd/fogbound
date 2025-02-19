@@ -1,72 +1,100 @@
-using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
 using UnityEngine;
-using TMPro; // ✅ Required for TextMesh Pro
-using System.Net;
-using System.Net.Sockets;
+using Unity.Netcode;
+using Unity.Services.Core;
+using Unity.Services.Multiplay;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
+using Unity.Networking.Transport.Relay;
+using Unity.Netcode.Transports.UTP;
+using System.Threading.Tasks;
+using TMPro; // For UI Text Elements
+using Unity.Services.Authentication;
 
 public class MultiplayerUI : MonoBehaviour
 {
-    public TMP_InputField ipAddressInput; // 🆕 Input field for Client to enter IP
-    public TMP_Text hostIpText; // 🆕 Display the Host's IP address
-    public TMP_Text statusText; // Status updates for UI
+    public TMP_Text JoinCodeText; // Shows Join Code for Clients
+    public TMP_InputField joinCodeInput; // Input field for Clients to enter Join Code
 
     private UnityTransport transport;
 
-    void Start()
+    async void Start()
     {
         transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
 
-        // 🏠 Display the host's IP when starting the game
-        if (hostIpText != null)
+        // Initialize Unity Services (Must be done before using Relay)
+        if (!UnityServices.State.Equals(ServicesInitializationState.Initialized))
         {
-            hostIpText.text = $"Your IP: {GetLocalIPAddress()}";
+            await UnityServices.InitializeAsync();
+        }
+        // ✅ Sign in anonymously if not already signed in
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
     }
 
-    public void StartHost()
+    public async void StartHost()
     {
-        string localIP = GetLocalIPAddress();
-        transport.SetConnectionData(localIP, 7777); // Use port 7777
-        NetworkManager.Singleton.StartHost();
-        UpdateStatus("Hosting Game... Share your IP: " + localIP);
-    }
-
-    public void StartClient()
-    {
-        string ip = ipAddressInput.text; // Get entered IP from UI
-        if (string.IsNullOrEmpty(ip))
+        try
         {
-            UpdateStatus("❌ Enter Host IP!");
-            return;
+            // Allocate a Relay Server Slot for up to 4 players
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(4);
+
+            // Generate a join code for clients to use
+            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
+            // Configure the Transport Layer to use Relay
+            transport.SetRelayServerData(
+                allocation.RelayServer.IpV4,
+                (ushort)allocation.RelayServer.Port,
+                allocation.AllocationIdBytes,
+                allocation.Key,
+                allocation.ConnectionData
+            );
+
+            // Start hosting with Unity Netcode
+            NetworkManager.Singleton.StartHost();
+
+            // Display the Join Code for clients
+            JoinCodeText.text = $"Relay Join Code: {joinCode} (Share this)";
         }
-
-        transport.SetConnectionData(ip, 7777);
-        NetworkManager.Singleton.StartClient();
-        UpdateStatus("Joining Game...");
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Relay Error: {e.Message}");
+        }
     }
 
-    private string GetLocalIPAddress()
+    public async void StartClient()
     {
-        // Retrieves the local network IP address (not public)
-        string localIP = "127.0.0.1";
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
+        try
         {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            string joinCode = joinCodeInput.text; // Get Join Code from UI
+            if (string.IsNullOrEmpty(joinCode))
             {
-                localIP = ip.ToString();
-                break;
+                Debug.LogError("❌ Please enter a valid join code!");
+                return;
             }
-        }
-        return localIP;
-    }
 
-    private void UpdateStatus(string message)
-    {
-        if (statusText != null)
+            // Join Relay Server using the Join Code
+            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(
+                joinCode
+            );
+
+            // Configure Transport Layer for Relay
+            transport.SetRelayServerData(
+                joinAllocation.RelayServer.IpV4,
+                (ushort)joinAllocation.RelayServer.Port,
+                joinAllocation.AllocationIdBytes,
+                joinAllocation.Key,
+                joinAllocation.ConnectionData
+            );
+
+            // Start as Client
+            NetworkManager.Singleton.StartClient();
+        }
+        catch (System.Exception e)
         {
-            statusText.text = message;
+            Debug.LogError($"Relay Client Error: {e.Message}");
         }
     }
 }
