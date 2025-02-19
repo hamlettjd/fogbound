@@ -2040,6 +2040,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c28e0aea31dbec444a17f3536dba5034, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 297376962608731934}
 --- !u!1 &5300266846169792732
 GameObject:
   m_ObjectHideFlags: 0
