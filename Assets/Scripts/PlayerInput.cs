@@ -5,9 +5,19 @@ public class PlayerInput : MonoBehaviour
     public Vector3 MovementInput { get; private set; }
     public bool SprintInput { get; private set; }
     public bool JumpBuffered { get; set; }
-
-    [SerializeField]
     private GameObject multiplayerUICanvas; // Reference to the Multiplayer UI Canvas
+
+    void Start()
+    {
+        multiplayerUICanvas = GameObject.Find("NetworkCanvas");
+
+        if (multiplayerUICanvas == null)
+        {
+            Debug.LogError(
+                "❌ NetworkCanvas not found in the scene! Make sure it exists and is named correctly."
+            );
+        }
+    }
 
     void Update()
     {
