@@ -36,8 +36,8 @@ public class MultiplayerUI : MonoBehaviour
         if (sanitizedProfile.Length > 30)
         {
             sanitizedProfile = sanitizedProfile.Substring(0, 25);
-            // sanitizedProfile = sanitizedProfile + UnityEngine.Random.Range(1000, 9999);
-            sanitizedProfile = UnityEngine.Random.Range(1000, 9999).ToString();
+            sanitizedProfile = sanitizedProfile + UnityEngine.Random.Range(1000, 9999);
+            // sanitizedProfile = UnityEngine.Random.Range(1000, 9999).ToString();
         }
 
         Debug.Log($"Using sanitized profile: {sanitizedProfile}"); // ✅ Debugging log
