@@ -61,6 +61,8 @@ public class MultiplayerUI : MonoBehaviour
     {
         try
         {
+            Debug.Log($"Authenticated Player ID: {AuthenticationService.Instance.PlayerId}");
+
             // Allocate a Relay Server Slot for up to 4 players
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(4);
 
@@ -92,6 +94,8 @@ public class MultiplayerUI : MonoBehaviour
     {
         try
         {
+            Debug.Log($"Authenticated Player ID: {AuthenticationService.Instance.PlayerId}");
+
             string joinCode = joinCodeInput.text; // Get Join Code from UI
             if (string.IsNullOrEmpty(joinCode))
             {
