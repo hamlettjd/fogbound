@@ -6,6 +6,9 @@ public class PlayerInput : MonoBehaviour
     public bool SprintInput { get; private set; }
     public bool JumpBuffered { get; set; }
 
+    [SerializeField]
+    private GameObject multiplayerUICanvas; // Reference to the Multiplayer UI Canvas
+
     void Update()
     {
         // Get movement input
@@ -20,5 +23,18 @@ public class PlayerInput : MonoBehaviour
         }
 
         SprintInput = Input.GetKey(KeyCode.LeftShift);
+        // Toggle Multiplayer UI with Tab key
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleMultiplayerUI();
+        }
+    }
+
+    void ToggleMultiplayerUI()
+    {
+        if (multiplayerUICanvas != null)
+        {
+            multiplayerUICanvas.SetActive(!multiplayerUICanvas.activeSelf);
+        }
     }
 }

@@ -19,11 +19,37 @@ public class MultiplayerUI : MonoBehaviour
         transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
 
         // Initialize Unity Services (Must be done before using Relay)
-        if (!UnityServices.State.Equals(ServicesInitializationState.Initialized))
+        // ✅ Ensure Unity Services is initialized in standalone builds
+        transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+
+        // ✅ Get device ID and sanitize it to only contain valid characters
+        string rawDeviceId = UnityEngine.SystemInfo.deviceUniqueIdentifier;
+
+        // ✅ Remove invalid characters (keep only a-z, A-Z, 0-9, -, and _)
+        string sanitizedProfile = System.Text.RegularExpressions.Regex.Replace(
+            rawDeviceId,
+            "[^a-zA-Z0-9_-]",
+            ""
+        );
+
+        // ✅ Ensure it does not exceed 30 characters
+        if (sanitizedProfile.Length > 30)
         {
-            await UnityServices.InitializeAsync();
+            sanitizedProfile = sanitizedProfile.Substring(0, 25);
+            sanitizedProfile = sanitizedProfile + UnityEngine.Random.Range(1000, 9999);
         }
-        // ✅ Sign in anonymously if not already signed in
+
+        Debug.Log($"Using sanitized profile: {sanitizedProfile}"); // ✅ Debugging log
+
+        // ✅ Initialize Unity Services with the sanitized profile name
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+        {
+            await UnityServices.InitializeAsync(
+                new InitializationOptions().SetProfile(sanitizedProfile)
+            );
+        }
+
+        // ✅ Ensure Authentication is signed in (Required for Relay)
         if (!AuthenticationService.Instance.IsSignedIn)
         {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
