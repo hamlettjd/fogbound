@@ -82,6 +82,8 @@ public class MultiplayerUI : MonoBehaviour
             NetworkManager.Singleton.StartHost();
 
             // Display the Join Code for clients
+            Debug.Log($"✅ Host started. Relay Join Code: {joinCode}");
+
             JoinCodeText.text = $"Relay Join Code: {joinCode} (Share this)";
         }
         catch (System.Exception e)
@@ -97,6 +99,8 @@ public class MultiplayerUI : MonoBehaviour
             Debug.Log($"Authenticated Player ID: {AuthenticationService.Instance.PlayerId}");
 
             string joinCode = joinCodeInput.text; // Get Join Code from UI
+            Debug.Log($"🔍 Attempting to join Relay session with code: {joinCode}");
+
             if (string.IsNullOrEmpty(joinCode))
             {
                 Debug.LogError("❌ Please enter a valid join code!");
