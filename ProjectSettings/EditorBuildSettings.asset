@@ -8,5 +8,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/knightScene.unity
     guid: 537245a2bb3940a4295b840c364c8814
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3ce24a6002931ca4bb6ddb5c2f788cf6
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: b7870e1b028f1e04799eb5532968fe80
+  - enabled: 1
+    path: Assets/Scenes/LoadingScreen.unity
+    guid: 5932894c1c2673b46b050f11a5a2d4fc
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

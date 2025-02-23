@@ -21,6 +21,12 @@ MonoBehaviour:
   m_OverrideGlobalSceneList: 1
   m_Scenes:
   - m_enabled: 1
+    m_path: Assets/Scenes/MainMenu.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/LoadingScreen.unity
+  - m_enabled: 1
+    m_path: Assets/Scenes/Lobby.unity
+  - m_enabled: 1
     m_path: Assets/Scenes/knightScene.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
