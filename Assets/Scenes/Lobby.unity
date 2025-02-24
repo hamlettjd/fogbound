@@ -543,7 +543,7 @@ MonoBehaviour:
   characterNameText: {fileID: 1849541517}
   characterPortrait: {fileID: 558973157}
   highlightBorder: {fileID: 508844990}
-  characterModel: {fileID: 0}
+  characterModel: {fileID: 732334148}
   selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &105626054
@@ -2219,7 +2219,7 @@ MonoBehaviour:
   characterNameText: {fileID: 360519122}
   characterPortrait: {fileID: 366783857}
   highlightBorder: {fileID: 240105152}
-  characterModel: {fileID: 0}
+  characterModel: {fileID: 626909887}
   selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1050784114
@@ -2812,7 +2812,7 @@ MonoBehaviour:
   characterNameText: {fileID: 911162756}
   characterPortrait: {fileID: 2134573276}
   highlightBorder: {fileID: 1572144982}
-  characterModel: {fileID: 0}
+  characterModel: {fileID: 2034878924}
   selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1269498310
