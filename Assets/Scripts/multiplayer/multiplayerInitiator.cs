@@ -12,6 +12,7 @@ public class MultiplayerInitiator : MonoBehaviour
 {
     public TMP_Text JoinCodeText; // Shows Join Code for Clients
     public TMP_InputField joinCodeInput; // Input field for Clients to enter Join Code
+    public TMP_InputField nameInputField; // Assign via inspector
 
     private UnityTransport transport;
 
@@ -80,10 +81,14 @@ public class MultiplayerInitiator : MonoBehaviour
             );
 
             // Start hosting with Unity Netcode
+            GameData.Instance.playerName = nameInputField.text;
+            GameData.Instance.playerCharacterId = 0;
             NetworkManager.Singleton.StartHost();
 
             // Display the Join Code for clients
             Debug.Log($"✅ Host started. Relay Join Code: {joinCode}");
+
+            Debug.Log($"GameData Playername stored as: {GameData.Instance.playerName}");
 
             JoinCodeText.text = $"Relay Join Code: {joinCode} (Share this)";
             NetworkManager.Singleton.SceneManager.LoadScene("Lobby", LoadSceneMode.Single);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class CharacterSelectorController : MonoBehaviour
 {
@@ -45,14 +46,41 @@ public class CharacterSelectorController : MonoBehaviour
         selectedProfile = clickedProfile;
         selectedProfile.SetHighlight(true);
 
-        // TODO: Update the current character selection (e.g., notify the network manager, update player info, etc.)
+        // Determine the new character ID based on the button's position in the list.
+        int newCharacterId = profileButtons.IndexOf(clickedProfile);
+
+        // Update the local LobbyPlayer's network variable.
+        var localLobbyPlayer =
+            NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<LobbyPlayer>();
+        if (localLobbyPlayer != null)
+        {
+            localLobbyPlayer.selectedCharacterId.Value = newCharacterId;
+        }
+        else
+        {
+            Debug.LogWarning("Local LobbyPlayer not found!");
+        }
+
+        // Optionally update the UI entry immediately.
+        LobbyController lobbyController = FindFirstObjectByType<LobbyController>();
+        if (lobbyController != null)
+        {
+            lobbyController.OnCharacterSelected(newCharacterId);
+        }
+        else
+        {
+            Debug.LogWarning("LobbyController not found in scene!");
+        }
+
         Debug.Log(
             "Selected character: "
                 + (
-                    selectedProfile.characterNameText != null
-                        ? selectedProfile.characterNameText.text
+                    clickedProfile.characterNameText != null
+                        ? clickedProfile.characterNameText.text
                         : "Unnamed"
                 )
+                + " with ID "
+                + newCharacterId
         );
     }
 }

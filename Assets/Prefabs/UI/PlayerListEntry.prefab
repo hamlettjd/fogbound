@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4752261117916895124}
   - component: {fileID: 6137835761716317343}
   - component: {fileID: 4995732847953644962}
+  - component: {fileID: -6667695133149126856}
   m_Layer: 5
   m_Name: PlayerListEntry
   m_TagString: Untagged
@@ -104,6 +105,24 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &-6667695133149126856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855998291021632070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db18dcaa94f396442b0b1fe50ee3846c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNameText: {fileID: 9219764153510409987}
+  characterImage: {fileID: 5083734288297620132}
+  characterSprites:
+  - {fileID: 21300000, guid: deae2dde7339a2148b56579efb6e8859, type: 3}
+  - {fileID: 21300000, guid: e24d461aacbb01f4f8454c197c642151, type: 3}
+  - {fileID: 21300000, guid: 1069d3d6642995d498fac09c8fef99fe, type: 3}
 --- !u!1 &5765100740028454903
 GameObject:
   m_ObjectHideFlags: 0

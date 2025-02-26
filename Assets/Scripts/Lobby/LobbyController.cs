@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 // Include networking namespaces as needed (e.g., using Unity.Netcode)
 
@@ -18,7 +20,7 @@ public class LobbyController : MonoBehaviour
     public Button startGameButton;
 
     // Dictionary to keep track of player entries (key could be player ID or name)
-    private Dictionary<string, GameObject> playerEntries = new Dictionary<string, GameObject>();
+    private Dictionary<ulong, GameObject> playerEntries = new Dictionary<ulong, GameObject>();
 
     private void Start()
     {
@@ -34,11 +36,24 @@ public class LobbyController : MonoBehaviour
         // (Optional) Add a listener for the Start Game button.
         startGameButton.onClick.AddListener(OnStartGameClicked);
 
-        // (Optional) Populate the lobby with current players.
-        // This would typically come from your networking layer.
-        // For demonstration, let's add a couple of dummy players.
-        AddPlayer("Player1", null);
-        AddPlayer("Player2", null);
+        // Subscribe to the event when a client connects
+        NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+        // In case the host is already connected, add that player too
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            AddPlayer(client.ClientId);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (NetworkManager.Singleton != null)
+            NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+    }
+
+    private void HandleClientConnected(ulong clientId)
+    {
+        AddPlayer(clientId);
     }
 
     /// <summary>
@@ -46,49 +61,77 @@ public class LobbyController : MonoBehaviour
     /// </summary>
     /// <param name="playerName">The player's display name.</param>
     /// <param name="characterSprite">The sprite of the character the player has selected (can be null).</param>
-    public void AddPlayer(string playerName, Sprite characterSprite)
+    public void AddPlayer(ulong clientId)
     {
-        if (playerEntries.ContainsKey(playerName))
-            return;
-
-        // Instantiate the prefab as a child of the content container.
-        GameObject entry = Instantiate(playerEntryPrefab, playerListContent);
-
-        // Set the player's name.
-        TMP_Text nameText = entry.transform.Find("PlayerNameText").GetComponent<TMP_Text>();
-        if (nameText != null)
+        var networkClient = NetworkManager.Singleton.ConnectedClients[clientId];
+        if (networkClient.PlayerObject != null)
         {
-            nameText.text = playerName;
+            var lobbyPlayer = networkClient.PlayerObject.GetComponent<LobbyPlayer>();
+            if (lobbyPlayer != null)
+            {
+                // Create a UI element (playerListItem) for the connected client.
+                GameObject listItem = Instantiate(playerEntryPrefab, playerListContent);
+                // Assume playerListItem has a script to set its UI, e.g., PlayerListItemController.
+                var itemController = listItem.GetComponent<PlayerEntriesController>();
+                if (itemController != null)
+                {
+                    Debug.Log($"B - player name is: {lobbyPlayer.playerName.Value}");
+                    Debug.Log(
+                        $"C - player name ToString() is: {lobbyPlayer.playerName.Value.ToString()}"
+                    );
+                    itemController.SetPlayerName(lobbyPlayer.playerName.Value.ToString());
+                    itemController.SetCharacterId(lobbyPlayer.selectedCharacterId.Value);
+                }
+                playerEntries.Add(clientId, listItem);
+            }
         }
-        else
-        {
-            Debug.LogWarning("PlayerNameText not found on prefab.");
-        }
+    }
 
-        // Set the character image.
-        Image charImage = entry.transform.Find("CharacterImage").GetComponent<Image>();
-        if (charImage != null)
+    // Called from the UI when a client (the local player) selects a different character.
+    // This function updates the local player's network variable.
+    public void OnCharacterSelected(int newCharacterId)
+    {
+        var localLobbyPlayer =
+            NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<LobbyPlayer>();
+        if (localLobbyPlayer != null)
         {
-            charImage.sprite = characterSprite; // This can be null if no sprite is provided.
+            localLobbyPlayer.selectedCharacterId.Value = newCharacterId;
+            // Optionally, update the local UI immediately.
+            if (
+                playerEntries.TryGetValue(
+                    NetworkManager.Singleton.LocalClientId,
+                    out GameObject listItem
+                )
+            )
+            {
+                var itemController = listItem.GetComponent<PlayerEntriesController>();
+                if (itemController != null)
+                    itemController.SetCharacterId(newCharacterId);
+            }
         }
-        else
-        {
-            Debug.LogWarning("CharacterImage not found on prefab.");
-        }
+    }
 
-        // Save reference for potential future removal/updates.
-        playerEntries.Add(playerName, entry);
+    public void UpdatePlayerEntryUI(ulong clientId, int newCharacterId)
+    {
+        if (playerEntries.TryGetValue(clientId, out GameObject listItem))
+        {
+            var itemController = listItem.GetComponent<PlayerEntriesController>();
+            if (itemController != null)
+            {
+                itemController.SetCharacterId(newCharacterId);
+            }
+        }
     }
 
     /// <summary>
     /// Removes a player from the player list.
     /// </summary>
-    public void RemovePlayer(string playerName)
+    public void RemovePlayer(ulong clientId)
     {
-        if (playerEntries.TryGetValue(playerName, out GameObject entry))
+        if (playerEntries.TryGetValue(clientId, out GameObject entry))
         {
             Destroy(entry);
-            playerEntries.Remove(playerName);
+            playerEntries.Remove(clientId);
         }
     }
 
@@ -99,8 +142,7 @@ public class LobbyController : MonoBehaviour
     {
         // Implement your logic to transition from lobby to game scene.
         // For example, using Unity Netcode:
-        // NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-
         Debug.Log("Start Game button clicked!");
+        NetworkManager.Singleton.SceneManager.LoadScene("knightScene", LoadSceneMode.Single);
     }
 }
