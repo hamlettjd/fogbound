@@ -54,7 +54,7 @@ public class CharacterSelectorController : MonoBehaviour
             NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<LobbyPlayer>();
         if (localLobbyPlayer != null)
         {
-            localLobbyPlayer.selectedCharacterId.Value = newCharacterId;
+            localLobbyPlayer.RequestCharacterSelectionChangeServerRpc(newCharacterId);
         }
         else
         {

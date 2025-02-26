@@ -18,10 +18,11 @@ public class LobbyPlayer : NetworkBehaviour
         // Only the owning client needs to send their name when they join.
         if (IsOwner)
         {
-            playerName.Value = GameData.Instance.playerName;
-            //selectedCharacterId = GameData.Instance.playerCharacterId;
-            Debug.Log($"PlayerName in lobbyPlayer is: {playerName.Value}");
-            selectedCharacterId.Value = GameData.Instance.playerCharacterId; // Make sure this value is valid (0 or 1)
+            // Set the player name (this works because names don’t change often)
+            RequestSetPlayerNameServerRpc(GameData.Instance.playerName.ToString());
+
+            // Request to set the character ID from the local GameData
+            RequestCharacterSelectionChangeServerRpc(GameData.Instance.playerCharacterId);
             Debug.Log(
                 $"[LobbyPlayer] Setting selectedCharacterId for client {OwnerClientId} to {selectedCharacterId.Value}"
             );
@@ -44,5 +45,23 @@ public class LobbyPlayer : NetworkBehaviour
         {
             lobbyController.UpdatePlayerEntryUI(OwnerClientId, newId);
         }
+    }
+
+    [ServerRpc]
+    public void RequestCharacterSelectionChangeServerRpc(int newCharacterId)
+    {
+        if (newCharacterId < 0)
+            return; // Prevent invalid IDs
+
+        Debug.Log(
+            $"[LobbyPlayer] Server received request from {OwnerClientId} to change character to {newCharacterId}"
+        );
+        selectedCharacterId.Value = newCharacterId; // The server updates the NetworkVariable
+    }
+
+    [ServerRpc]
+    private void RequestSetPlayerNameServerRpc(string newName)
+    {
+        playerName.Value = newName;
     }
 }
