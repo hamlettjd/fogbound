@@ -134,6 +134,9 @@ public class MultiplayerInitiator : MonoBehaviour
                 Debug.LogError("❌ Lobby scene is NOT in build settings!");
                 return;
             }
+            // Start hosting with Unity Netcode
+            GameData.Instance.playerName = nameInputField.text;
+            GameData.Instance.playerCharacterId = 0;
             // Start as Client
             NetworkManager.Singleton.StartClient();
             // client should be redirected to host right?
