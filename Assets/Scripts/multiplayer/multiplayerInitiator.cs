@@ -4,7 +4,7 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.Netcode.Transports.UTP;
-using TMPro; // For UI Text Elements
+using TMPro;
 using Unity.Services.Authentication;
 using UnityEngine.SceneManagement;
 
