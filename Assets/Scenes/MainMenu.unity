@@ -17878,6 +17878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: 
+  playerCharacterId: 0
 --- !u!4 &986502724
 Transform:
   m_ObjectHideFlags: 0
