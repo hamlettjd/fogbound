@@ -28,12 +28,26 @@ public class LobbyPlayer : NetworkBehaviour
             );
         }
         selectedCharacterId.OnValueChanged += OnSelectedCharacterIdChanged;
-        selectedCharacterId.OnValueChanged += (oldValue, newValue) =>
+        playerName.OnValueChanged += OnPlayerNameChanged;
+    }
+
+    /// <summary>
+    /// Called whenever playerName is updated by the server.
+    /// </summary>
+    private void OnPlayerNameChanged(FixedString32Bytes oldValue, FixedString32Bytes newValue)
+    {
+        Debug.Log($"[LobbyPlayer] Player {OwnerClientId} name changed to {newValue}");
+
+        // Find and update lobby UI entry for this player
+        LobbyController lobbyController = FindFirstObjectByType<LobbyController>();
+        if (lobbyController != null)
         {
-            Debug.Log(
-                $"[LobbyPlayer] selectedCharacterId changed from {oldValue} to {newValue} for client {OwnerClientId}"
+            lobbyController.UpdatePlayerEntryUI(
+                OwnerClientId,
+                newValue.ToString(),
+                selectedCharacterId.Value
             );
-        };
+        }
     }
 
     private void OnSelectedCharacterIdChanged(int oldId, int newId)
@@ -43,7 +57,7 @@ public class LobbyPlayer : NetworkBehaviour
         LobbyController lobbyController = FindFirstObjectByType<LobbyController>();
         if (lobbyController != null)
         {
-            lobbyController.UpdatePlayerEntryUI(OwnerClientId, newId);
+            lobbyController.UpdatePlayerEntryUI(OwnerClientId, playerName.Value.ToString(), newId);
         }
     }
 

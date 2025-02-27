@@ -95,7 +95,7 @@ public class LobbyController : MonoBehaviour
             NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<LobbyPlayer>();
         if (localLobbyPlayer != null)
         {
-            localLobbyPlayer.selectedCharacterId.Value = newCharacterId;
+            localLobbyPlayer.RequestCharacterSelectionChangeServerRpc(newCharacterId);
             // Optionally, update the local UI immediately.
             if (
                 playerEntries.TryGetValue(
@@ -111,14 +111,15 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    public void UpdatePlayerEntryUI(ulong clientId, int newCharacterId)
+    public void UpdatePlayerEntryUI(ulong clientId, string playerName, int selectedCharacterId)
     {
         if (playerEntries.TryGetValue(clientId, out GameObject listItem))
         {
             var itemController = listItem.GetComponent<PlayerEntriesController>();
             if (itemController != null)
             {
-                itemController.SetCharacterId(newCharacterId);
+                itemController.SetPlayerName(playerName);
+                itemController.SetCharacterId(selectedCharacterId);
             }
         }
     }
