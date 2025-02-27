@@ -78,4 +78,34 @@ public class LobbyPlayer : NetworkBehaviour
     {
         playerName.Value = newName;
     }
+
+    public override void OnNetworkDespawn()
+    {
+        if (!IsServer)
+        {
+            // Destroy this LobbyPlayer instance on clients since it's only needed in the lobby.
+            Destroy(gameObject);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = true)]
+    public void NotifyClientsToUpdateGameDataServerRpc()
+    {
+        UpdateGameDataClientRpc();
+    }
+
+    [ClientRpc]
+    private void UpdateGameDataClientRpc()
+    {
+        // Each client updates GameData with its OWN selected character
+        var localLobbyPlayer =
+            NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<LobbyPlayer>();
+        if (localLobbyPlayer != null)
+        {
+            GameData.Instance.playerCharacterId = localLobbyPlayer.selectedCharacterId.Value;
+            Debug.Log(
+                $"[LobbyPlayer] Client {NetworkManager.Singleton.LocalClientId} updated GameData to character {GameData.Instance.playerCharacterId}"
+            );
+        }
+    }
 }

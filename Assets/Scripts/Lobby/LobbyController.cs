@@ -141,9 +141,18 @@ public class LobbyController : MonoBehaviour
     /// </summary>
     private void OnStartGameClicked()
     {
-        // Implement your logic to transition from lobby to game scene.
-        // For example, using Unity Netcode:
-        Debug.Log("Start Game button clicked!");
-        NetworkManager.Singleton.SceneManager.LoadScene("knightScene", LoadSceneMode.Single);
+        var localLobbyPlayer =
+            NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<LobbyPlayer>();
+        if (localLobbyPlayer != null)
+        {
+            // Host tells all clients to update their own GameData before transitioning
+            localLobbyPlayer.NotifyClientsToUpdateGameDataServerRpc();
+        }
+
+        // Load the game scene (host initiates scene transition)
+        if (NetworkManager.Singleton.IsHost)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("knightScene", LoadSceneMode.Single);
+        }
     }
 }
