@@ -5,51 +5,69 @@ using TMPro;
 public class PlayerCharacter : NetworkBehaviour
 {
     public TMP_Text playerNameText; // Assign in Inspector
-    private string playerName;
     private Camera mainCamera;
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner) // If this character belongs to the local player
+        if (IsOwner) // Hide the local player's own nameplate
         {
             if (playerNameText != null)
             {
-                playerNameText.gameObject.SetActive(false); // Hide name for self
+                playerNameText.gameObject.SetActive(false);
             }
         }
     }
 
     private void Start()
     {
-        mainCamera = Camera.main; // Find the main camera
+        FindMainCamera(); // Get the correct camera reference
     }
 
     private void Update()
     {
-        if (playerNameText != null)
+        if (mainCamera == null)
         {
-            // Compute direction from text to camera
-            Vector3 direction = playerNameText.transform.position - mainCamera.transform.position;
-            // Zero out the y component to lock rotation on the horizontal plane
-            direction.y = 0;
-            if (direction.sqrMagnitude > 0.001f)
-            {
-                playerNameText.transform.rotation = Quaternion.LookRotation(direction);
-            }
+            FindMainCamera(); // Ensure we get the camera if it's null
+        }
+
+        if (playerNameText != null && mainCamera != null)
+        {
+            FaceCameraYAxisOnly();
+        }
+    }
+
+    private void FindMainCamera()
+    {
+        if (Camera.main != null)
+        {
+            mainCamera = Camera.main;
+        }
+        else
+        {
+            Debug.LogWarning("Main camera not found for player name billboard.");
+        }
+    }
+
+    private void FaceCameraYAxisOnly()
+    {
+        // Get direction from text to camera
+        Vector3 direction = mainCamera.transform.position - playerNameText.transform.position;
+
+        // Lock the Y-axis by zeroing out the Y component
+        direction.y = 0;
+
+        // Check if direction is valid (to prevent flickering)
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            playerNameText.transform.rotation = Quaternion.LookRotation(direction);
         }
     }
 
     public void SetPlayerName(string name)
     {
-        playerName = name;
-        UpdateUI();
-    }
-
-    private void UpdateUI()
-    {
         if (playerNameText != null)
         {
-            playerNameText.text = playerName;
+            playerNameText.text = name;
         }
     }
 }
