@@ -8,6 +8,17 @@ public class PlayerCharacter : NetworkBehaviour
     private string playerName;
     private Camera mainCamera;
 
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner) // If this character belongs to the local player
+        {
+            if (playerNameText != null)
+            {
+                playerNameText.gameObject.SetActive(false); // Hide name for self
+            }
+        }
+    }
+
     private void Start()
     {
         mainCamera = Camera.main; // Find the main camera
@@ -17,10 +28,14 @@ public class PlayerCharacter : NetworkBehaviour
     {
         if (playerNameText != null)
         {
-            // Make the name tag face the camera
-            playerNameText.transform.rotation = Quaternion.LookRotation(
-                playerNameText.transform.position - mainCamera.transform.position
-            );
+            // Compute direction from text to camera
+            Vector3 direction = playerNameText.transform.position - mainCamera.transform.position;
+            // Zero out the y component to lock rotation on the horizontal plane
+            direction.y = 0;
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                playerNameText.transform.rotation = Quaternion.LookRotation(direction);
+            }
         }
     }
 
