@@ -8,7 +8,7 @@ public abstract class Power : NetworkBehaviour
 {
     public string PowerName;
     public float Cooldown;
-    
+
     public abstract void Activate(); // Core activation method
     public abstract bool CanActivate(); // Check if activation is allowed
 }

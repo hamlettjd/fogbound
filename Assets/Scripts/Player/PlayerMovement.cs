@@ -65,7 +65,7 @@ public class PlayerMovement : NetworkBehaviour
         if (input.JumpBuffered && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            input.JumpBuffered = false;
+            input.ResetJumpBuffer();
         }
     }
 }

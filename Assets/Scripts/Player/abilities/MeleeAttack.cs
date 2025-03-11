@@ -9,11 +9,12 @@ public class MeleeAttack : Power
 {
     public float Damage = 10f;
     public float AttackRange = 2f;
-    
+
     public override void Activate()
     {
-        if (!CanActivate()) return;
-        
+        if (!CanActivate())
+            return;
+
         Debug.Log("Melee attack activated!");
         // Add attack logic here (raycast for hit detection, animation trigger, etc.)
         MeleeAttackServerRpc();
