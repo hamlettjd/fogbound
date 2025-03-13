@@ -33,6 +33,11 @@ public class PlayerInput : MonoBehaviour
             Debug.Log("Power2 Input Received. Calling UsePower(1)");
             UsePower(1);
         };
+        inputActions.Player.Power3.performed += ctx =>
+        {
+            Debug.Log("Power3 Input Received. Calling UsePower(2)");
+            UsePower(2);
+        };
     }
 
     void Start()

@@ -1930,6 +1930,7 @@ GameObject:
   - component: {fileID: -282635069988356174}
   - component: {fileID: 5780786536313145036}
   - component: {fileID: 4225639785864440147}
+  - component: {fileID: 1982723847520261938}
   m_Layer: 0
   m_Name: Hello_Knight
   m_TagString: Untagged
@@ -2281,6 +2282,27 @@ MonoBehaviour:
   Cooldown: 0
   Damage: 10
   AttackRange: 2
+--- !u!114 &1982723847520261938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5212998863462659123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11c1905462576274baeaf0aa68fa6a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  PowerName: 
+  Cooldown: 0
+  PullStrength: 10
+  PullRadius: 10
+  FullForceDistance: 2
+  MetalLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &5300266846169792732
 GameObject:
   m_ObjectHideFlags: 0

@@ -80,6 +80,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Power3"",
+                    ""type"": ""Button"",
+                    ""id"": ""084cc315-43a7-413b-b33b-0ef0c09154d9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -119,7 +128,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a3baa3a6-1e8d-48d8-bca7-99cec1f7d059"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -192,6 +201,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19fdc0f0-e4c7-4a5c-8cba-a6a31ed53532"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Power3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -223,6 +243,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_ToggleUI = m_Player.FindAction("ToggleUI", throwIfNotFound: true);
         m_Player_Power1 = m_Player.FindAction("Power1", throwIfNotFound: true);
         m_Player_Power2 = m_Player.FindAction("Power2", throwIfNotFound: true);
+        m_Player_Power3 = m_Player.FindAction("Power3", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -295,6 +316,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ToggleUI;
     private readonly InputAction m_Player_Power1;
     private readonly InputAction m_Player_Power2;
+    private readonly InputAction m_Player_Power3;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -305,6 +327,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @ToggleUI => m_Wrapper.m_Player_ToggleUI;
         public InputAction @Power1 => m_Wrapper.m_Player_Power1;
         public InputAction @Power2 => m_Wrapper.m_Player_Power2;
+        public InputAction @Power3 => m_Wrapper.m_Player_Power3;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -332,6 +355,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Power2.started += instance.OnPower2;
             @Power2.performed += instance.OnPower2;
             @Power2.canceled += instance.OnPower2;
+            @Power3.started += instance.OnPower3;
+            @Power3.performed += instance.OnPower3;
+            @Power3.canceled += instance.OnPower3;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -354,6 +380,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Power2.started -= instance.OnPower2;
             @Power2.performed -= instance.OnPower2;
             @Power2.canceled -= instance.OnPower2;
+            @Power3.started -= instance.OnPower3;
+            @Power3.performed -= instance.OnPower3;
+            @Power3.canceled -= instance.OnPower3;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -388,5 +417,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnToggleUI(InputAction.CallbackContext context);
         void OnPower1(InputAction.CallbackContext context);
         void OnPower2(InputAction.CallbackContext context);
+        void OnPower3(InputAction.CallbackContext context);
     }
 }

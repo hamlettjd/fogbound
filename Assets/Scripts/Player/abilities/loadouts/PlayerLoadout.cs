@@ -34,7 +34,8 @@ public class PlayerLoadout : NetworkBehaviour
             // Ensure powers are assigned correctly on the local client
             // Find and store existing power components instead of adding them
             MeleeAttack meleeAttack = GetComponent<MeleeAttack>();
-            MistbornSteelPush steelPush = GetComponent<MistbornSteelPush>();
+            MistbornSteelPushOmni steelPush = GetComponent<MistbornSteelPushOmni>();
+            MistbornIronPullOmni IronPull = GetComponent<MistbornIronPullOmni>();
 
             if (meleeAttack != null)
             {
@@ -48,6 +49,14 @@ public class PlayerLoadout : NetworkBehaviour
             if (steelPush != null)
             {
                 AvailablePowers.Add(steelPush);
+            }
+            else
+            {
+                Debug.LogError("[PlayerLoadout] MistbornSteelPush component is missing on player!");
+            }
+            if (IronPull != null)
+            {
+                AvailablePowers.Add(IronPull);
             }
             else
             {

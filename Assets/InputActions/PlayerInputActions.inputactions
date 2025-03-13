@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Power3",
+                    "type": "Button",
+                    "id": "084cc315-43a7-413b-b33b-0ef0c09154d9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -97,7 +106,7 @@
                 {
                     "name": "",
                     "id": "a3baa3a6-1e8d-48d8-bca7-99cec1f7d059",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -170,6 +179,17 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "19fdc0f0-e4c7-4a5c-8cba-a6a31ed53532",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Power3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

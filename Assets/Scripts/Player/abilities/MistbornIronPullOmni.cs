@@ -1,12 +1,12 @@
 using UnityEngine;
 using Unity.Netcode;
 
-public class MistbornSteelPush : Power
+public class MistbornIronPullOmni : Power
 {
-    public float PushStrength = 5f;
-    public float PushRadius = 5f;
+    public float PullStrength = 5f;
+    public float PullRadius = 5f;
 
-    // Within this distance, the push strength is at full power.
+    // Within this distance, the pull strength is at full power.
     public float FullForceDistance = 2f;
 
     // LayerMask to filter which colliders to consider.
@@ -21,12 +21,12 @@ public class MistbornSteelPush : Power
 
         if (IsOwner) // Ensure only the owning client makes the RPC call
         {
-            SteelPushServerRpc();
+            IronPullServerRpc();
         }
         else
         {
             Debug.Log(
-                $"[MistbornSteelPush] Ignoring activation because client {NetworkManager.LocalClientId} is not the owner."
+                $"[MistbornIronPull] Ignoring activation because client {NetworkManager.LocalClientId} is not the owner."
             );
         }
     }
@@ -37,9 +37,9 @@ public class MistbornSteelPush : Power
     }
 
     [ServerRpc]
-    private void SteelPushServerRpc()
+    private void IronPullServerRpc()
     {
-        Debug.Log("Steel Push executed on server");
+        Debug.Log("Iron Pull executed on server");
 
         // The Allomancer's "center of self" is assumed to be transform.position.
         Vector3 center = transform.position;
@@ -50,8 +50,8 @@ public class MistbornSteelPush : Power
         Debug.Log($"Allomancer mass: {allomancerMass}");
 
         // Find nearby colliders using the specified layer mask.
-        Collider[] hitColliders = Physics.OverlapSphere(center, PushRadius, MetalLayerMask);
-        Debug.Log($"Found {hitColliders.Length} colliders within PushRadius {PushRadius}");
+        Collider[] hitColliders = Physics.OverlapSphere(center, PullRadius, MetalLayerMask);
+        Debug.Log($"Found {hitColliders.Length} colliders within PullRadius {PullRadius}");
 
         foreach (Collider hit in hitColliders)
         {
@@ -62,12 +62,12 @@ public class MistbornSteelPush : Power
                 Debug.Log(
                     $"Processing metal object: {hit.gameObject.name} with weight {metalComp.weight}"
                 );
-                ApplyPushForce(hit, center, allomancerMass, allomancerRb, metalComp);
+                ApplyPullForce(hit, center, allomancerMass, allomancerRb, metalComp);
             }
         }
     }
 
-    private void ApplyPushForce(
+    private void ApplyPullForce(
         Collider target,
         Vector3 center,
         float allomancerMass,
@@ -76,6 +76,8 @@ public class MistbornSteelPush : Power
     )
     {
         Rigidbody targetRb = target.GetComponent<Rigidbody>();
+        // Compute the direction vector from the Allomancer to the target.
+        // (In push this is used directly; here we'll invert it as needed.)
         Vector3 direction = (target.transform.position - center).normalized;
         Debug.Log($"Direction from allomancer to target ({target.gameObject.name}): {direction}");
 
@@ -85,12 +87,12 @@ public class MistbornSteelPush : Power
 
         // Calculate a distance factor.
         // If the target is within FullForceDistance, factor is 1.
-        // Beyond that, it linearly decreases to 0 at PushRadius.
+        // Beyond that, it linearly decreases to 0 at PullRadius.
         float distanceFactor = 1f;
         if (distance > FullForceDistance)
         {
             distanceFactor = Mathf.Clamp01(
-                1f - (distance - FullForceDistance) / (PushRadius - FullForceDistance)
+                1f - (distance - FullForceDistance) / (PullRadius - FullForceDistance)
             );
         }
         Debug.Log($"Distance factor for target ({target.gameObject.name}): {distanceFactor}");
@@ -101,9 +103,10 @@ public class MistbornSteelPush : Power
         if (immovable)
         {
             Debug.Log(
-                $"Target {target.gameObject.name} is immovable. Applying full (scaled) recoil force to the Allomancer."
+                $"Target {target.gameObject.name} is immovable. Applying full pull force to the Allomancer."
             );
-            allomancerRb.AddForce(-direction * PushStrength * distanceFactor, ForceMode.Impulse);
+            // When the target is immovable, the Allomancer is pulled toward the object.
+            allomancerRb.AddForce(direction * PullStrength * distanceFactor, ForceMode.Impulse);
             return;
         }
 
@@ -114,21 +117,24 @@ public class MistbornSteelPush : Power
             $"Target {target.gameObject.name} weight: {targetWeight}, Total effective mass: {totalMass}"
         );
 
-        // The target receives force proportional to the Allomancer's mass,
-        // and the Allomancer gets recoil proportional to the target's weight.
-        float forceOnTarget = PushStrength * (allomancerMass / totalMass) * distanceFactor;
-        float forceOnAllomancer = PushStrength * (targetWeight / totalMass) * distanceFactor;
+        // For pulling:
+        // - The target receives a force (pull) proportional to the Allomancer's mass,
+        //   which is applied towards the Allomancer (i.e. opposite to 'direction').
+        // - The Allomancer receives a force (pull) proportional to the target's weight,
+        //   which is applied towards the target (i.e. in 'direction').
+        float forceOnTarget = PullStrength * (allomancerMass / totalMass) * distanceFactor;
+        float forceOnAllomancer = PullStrength * (targetWeight / totalMass) * distanceFactor;
         Debug.Log(
             $"Force on target ({target.gameObject.name}): {forceOnTarget}, Force on Allomancer: {forceOnAllomancer}"
         );
 
-        // Apply recoil force to the Allomancer (opposite to push direction).
-        allomancerRb.AddForce(-direction * forceOnAllomancer, ForceMode.Impulse);
-
-        // Apply force to the target.
+        // Apply pull force to the target (pulling it toward the Allomancer).
         if (targetRb != null)
         {
-            targetRb.AddForce(direction * forceOnTarget, ForceMode.Impulse);
+            targetRb.AddForce(-direction * forceOnTarget, ForceMode.Impulse);
         }
+
+        // Apply pull force to the Allomancer (pulling them toward the target).
+        allomancerRb.AddForce(direction * forceOnAllomancer, ForceMode.Impulse);
     }
 }

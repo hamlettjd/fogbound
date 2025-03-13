@@ -7211,7 +7211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2709490a359160a42b670d80da85c61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 4
+  weight: 0.15
   isImmovable: 0
 --- !u!54 &194096266
 Rigidbody:
@@ -7221,7 +7221,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 194096263}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.15
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -26714,7 +26714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2709490a359160a42b670d80da85c61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 10
+  weight: 0.19
   isImmovable: 0
 --- !u!54 &808399642
 Rigidbody:
@@ -26724,7 +26724,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 808399639}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.3
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
