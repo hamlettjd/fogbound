@@ -89,6 +89,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Power4"",
+                    ""type"": ""Button"",
+                    ""id"": ""d02792ab-4bc9-445a-ba62-e91d149d44fc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +221,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Power3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a552441-2a0b-4b64-abf7-4d8957c2dd36"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Power4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -244,6 +264,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Power1 = m_Player.FindAction("Power1", throwIfNotFound: true);
         m_Player_Power2 = m_Player.FindAction("Power2", throwIfNotFound: true);
         m_Player_Power3 = m_Player.FindAction("Power3", throwIfNotFound: true);
+        m_Player_Power4 = m_Player.FindAction("Power4", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -317,6 +338,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Power1;
     private readonly InputAction m_Player_Power2;
     private readonly InputAction m_Player_Power3;
+    private readonly InputAction m_Player_Power4;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -328,6 +350,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Power1 => m_Wrapper.m_Player_Power1;
         public InputAction @Power2 => m_Wrapper.m_Player_Power2;
         public InputAction @Power3 => m_Wrapper.m_Player_Power3;
+        public InputAction @Power4 => m_Wrapper.m_Player_Power4;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -358,6 +381,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Power3.started += instance.OnPower3;
             @Power3.performed += instance.OnPower3;
             @Power3.canceled += instance.OnPower3;
+            @Power4.started += instance.OnPower4;
+            @Power4.performed += instance.OnPower4;
+            @Power4.canceled += instance.OnPower4;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -383,6 +409,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Power3.started -= instance.OnPower3;
             @Power3.performed -= instance.OnPower3;
             @Power3.canceled -= instance.OnPower3;
+            @Power4.started -= instance.OnPower4;
+            @Power4.performed -= instance.OnPower4;
+            @Power4.canceled -= instance.OnPower4;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -418,5 +447,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnPower1(InputAction.CallbackContext context);
         void OnPower2(InputAction.CallbackContext context);
         void OnPower3(InputAction.CallbackContext context);
+        void OnPower4(InputAction.CallbackContext context);
     }
 }

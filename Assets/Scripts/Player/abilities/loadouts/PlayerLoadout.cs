@@ -36,6 +36,7 @@ public class PlayerLoadout : NetworkBehaviour
             MeleeAttack meleeAttack = GetComponent<MeleeAttack>();
             MistbornSteelPushOmni steelPush = GetComponent<MistbornSteelPushOmni>();
             MistbornIronPullOmni IronPull = GetComponent<MistbornIronPullOmni>();
+            MistbornBurnVisuals BurnVisuals = GetComponent<MistbornBurnVisuals>();
 
             if (meleeAttack != null)
             {
@@ -57,6 +58,14 @@ public class PlayerLoadout : NetworkBehaviour
             if (IronPull != null)
             {
                 AvailablePowers.Add(IronPull);
+            }
+            else
+            {
+                Debug.LogError("[PlayerLoadout] MistbornSteelPush component is missing on player!");
+            }
+            if (BurnVisuals != null)
+            {
+                AvailablePowers.Add(BurnVisuals);
             }
             else
             {

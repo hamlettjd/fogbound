@@ -1931,6 +1931,7 @@ GameObject:
   - component: {fileID: 5780786536313145036}
   - component: {fileID: 4225639785864440147}
   - component: {fileID: 1982723847520261938}
+  - component: {fileID: 2866584775269210397}
   m_Layer: 0
   m_Name: Hello_Knight
   m_TagString: Untagged
@@ -2257,7 +2258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  PowerName: steel
+  PowerName: steel Omni
   Cooldown: 0
   PushStrength: 10
   PushRadius: 10
@@ -2295,7 +2296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  PowerName: 
+  PowerName: Iron Omni
   Cooldown: 0
   PullStrength: 10
   PullRadius: 10
@@ -2303,6 +2304,28 @@ MonoBehaviour:
   MetalLayerMask:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &2866584775269210397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5212998863462659123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab7833255b8b6d648b547355cbd0772b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  PowerName: BurnVisuals
+  Cooldown: 0
+  VisualRadius: 5
+  MetalLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  BlueLinePrefab: {fileID: 7747264471708147726, guid: 98c187b1fac8b6349a896df98e3d5059, type: 3}
+  ChestTransform: {fileID: 1266228561771293985}
+  LineWidth: 0.02
 --- !u!1 &5300266846169792732
 GameObject:
   m_ObjectHideFlags: 0

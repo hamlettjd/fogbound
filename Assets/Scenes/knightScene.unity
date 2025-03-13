@@ -7211,7 +7211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2709490a359160a42b670d80da85c61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0.15
+  weight: 0.6
   isImmovable: 0
 --- !u!54 &194096266
 Rigidbody:
@@ -26714,7 +26714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2709490a359160a42b670d80da85c61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0.19
+  weight: 1
   isImmovable: 0
 --- !u!54 &808399642
 Rigidbody:
