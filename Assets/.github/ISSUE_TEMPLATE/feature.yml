@@ -1,0 +1,19 @@
+name: Feature
+description: Suggest a new feature or enhancement
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and concise description of the feature or improvement.
+  - type: checkboxes
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Define the conditions that must be met for the feature to be considered complete.
+      options:
+        - label: Criterion 1
+        - label: Criterion 2
+        - label: Criterion 3
